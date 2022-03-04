@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.javastart.foodieapp.item.Item;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -34,5 +35,6 @@ public class Order {
     private String address;
     private String telephone;
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private OrderStatus orderStatus;
 }
