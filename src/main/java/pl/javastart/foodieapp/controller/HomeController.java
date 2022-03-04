@@ -11,7 +11,6 @@ import pl.javastart.foodieapp.item.ItemRepository;
 import java.util.List;
 
 @Controller
-@ComponentScan
 public class HomeController {
 
     private ItemRepository itemRepository;
@@ -20,7 +19,7 @@ public class HomeController {
         this.itemRepository = itemRepository;
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String home(Model model){
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
