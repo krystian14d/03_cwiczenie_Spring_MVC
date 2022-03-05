@@ -22,4 +22,5 @@ public class Item {
     private String shortDescription;
     @Column(length = 1024)
     private String description;
+    private String imgUrl;
 }

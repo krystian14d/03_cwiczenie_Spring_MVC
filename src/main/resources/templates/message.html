@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Komunikat</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron home-jumbo">
+        <div class="container text-center text-white jumbo-container">
+            <div th:if="${message}" th:remove="tag">
+                <h1 class="display-3" th:text="${message.title}">Sukces</h1>
+                <p th:text="${message.content}">Dodano potrawę do zamówienia!</p>
+            </div>
+            <div th:if="!${message}" th:remove="tag">
+                <h1 class="display-3">Sukces</h1>
+                <p th:text="${message}">Dodano potrawę do zamówienia.</p>
+            </div>
+            <a th:href="@{/}">Powrót do strony głównej</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

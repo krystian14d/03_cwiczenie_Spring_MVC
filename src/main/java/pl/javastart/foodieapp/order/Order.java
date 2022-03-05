@@ -36,5 +36,5 @@ public class Order {
     private String telephone;
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private OrderStatus orderStatus;
+    private OrderStatus status;
 }

@@ -1,10 +1,8 @@
-package pl.javastart.foodieapp.controller;
+package pl.javastart.foodieapp;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import pl.javastart.foodieapp.item.Item;
 import pl.javastart.foodieapp.item.ItemRepository;
 
