@@ -13,7 +13,14 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    Optional<Item> findItemByNameIgnoreCase(String name) {
-        return itemRepository.findByNameIgnoreCase(name);
+    Optional<ItemDto> findItemByNameIgnoreCase(String name) {
+        Item foundItem = itemRepository.findByNameIgnoreCase(name);
+        return Optional.of(ItemDtoMapper.fromEntity(foundItem));
+    }
+
+    public Optional<ItemDto> findItemById(Long id){
+        Optional<Item> foundItem = itemRepository.findById(id);
+        ItemDto itemDto = ItemDtoMapper.fromEntity(foundItem.get());
+        return Optional.of(itemDto);
     }
 }

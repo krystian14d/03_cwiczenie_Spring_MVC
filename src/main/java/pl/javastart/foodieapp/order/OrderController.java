@@ -1,5 +1,6 @@
 package pl.javastart.foodieapp.order;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,26 +8,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.javastart.foodieapp.common.Message;
 import pl.javastart.foodieapp.item.Item;
+import pl.javastart.foodieapp.item.ItemDto;
 import pl.javastart.foodieapp.item.ItemRepository;
+import pl.javastart.foodieapp.item.ItemService;
 
 import java.util.Optional;
 
+@AllArgsConstructor
 @Controller
 public class OrderController {
 
     private ClientOrder clientOrder;
-    private ItemRepository itemRepository;
-    private OrderRepository orderRepository;
-
-    public OrderController(ClientOrder clientOrder, ItemRepository itemRepository, OrderRepository orderRepository) {
-        this.clientOrder = clientOrder;
-        this.itemRepository = itemRepository;
-        this.orderRepository = orderRepository;
-    }
+    private ItemService itemService;
+    private OrderService orderService;
 
     @GetMapping("/zamowienie/dodaj")
     public String addItemToOrder(@RequestParam Long itemId, Model model) {
-        Optional<Item> item = itemRepository.findById(itemId);
+        Optional<ItemDto> item = itemService.findItemById(itemId);
         item.ifPresent(clientOrder::add);
         if (item.isPresent()) {
             model.addAttribute("message", new Message("Dodano", "Do zamówienia dodano: " + item.get().getName()));
@@ -53,7 +51,7 @@ public class OrderController {
         Order order = clientOrder.getOrder();
         order.setAddress(address);
         order.setTelephone(telephone);
-        orderRepository.save(order);
+        orderService.saveOrder(order);
         clientOrder.clear();
         model.addAttribute("message", new Message("Dziękujemy", "Zamówienie przekazane do realizacji"));
         return "message";

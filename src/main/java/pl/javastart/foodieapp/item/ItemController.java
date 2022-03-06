@@ -18,7 +18,7 @@ public class ItemController {
 
     @GetMapping("/danie/{name}")
     public String getItem(@PathVariable String name, Model model) {
-        Optional<Item> item = itemService.findItemByNameIgnoreCase(name.replaceAll("-", " "));
+        Optional<ItemDto> item = itemService.findItemByNameIgnoreCase(name.replaceAll("-", " "));
         item.ifPresent(it -> model.addAttribute("item", it));
         return item.map(it -> "item").orElse("redirect:/");
     }

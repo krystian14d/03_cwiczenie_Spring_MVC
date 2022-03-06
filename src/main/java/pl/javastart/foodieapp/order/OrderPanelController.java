@@ -1,5 +1,6 @@
 package pl.javastart.foodieapp.order;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,23 +11,21 @@ import pl.javastart.foodieapp.item.Item;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
+@AllArgsConstructor
 @Controller
 public class OrderPanelController {
 
-    private OrderRepository orderRepository;
-
-    public OrderPanelController(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+    private OrderService orderService;
 
     @GetMapping("/panel/zamowienia")
     public String getOrders(@RequestParam(required = false) OrderStatus status, Model model) {
         List<Order> orders;
         if (status == null) {
-            orders = orderRepository.findAll();
+            orders = orderService.findAllOrders();
         } else {
-            orders = orderRepository.findAllByStatus(status);
+            orders = orderService.findAllOrdersByStatus(status);
         }
         model.addAttribute("orders", orders);
         return "panel/orders";
@@ -34,18 +33,21 @@ public class OrderPanelController {
 
     @GetMapping("/panel/zamowienie/{id}")
     public String singleOrder(@PathVariable Long id, Model model) {
-        Optional<Order> order = orderRepository.findById(id);
+        Optional<Order> order = orderService.findOrderById(id);
         return order.map(o -> singleOrderPanel(o, model))
                 .orElse("redirect:/");
     }
 
     @PostMapping("/panel/zamowienie/{id}")
     public String changeOrderStatus(@PathVariable Long id, Model model) {
-        Optional<Order> order = orderRepository.findById(id);
-        order.ifPresent(o -> {
-            o.setStatus(OrderStatus.nextStatus(o.getStatus()));
-            orderRepository.save(o);
-        });
+        Optional<Order> order = orderService.findOrderById(id);
+//        order.ifPresent(OrderPanelController::changeOrderStatusAndSave);
+        order.ifPresent(
+                o -> {
+                    o.setStatus(OrderStatus.nextStatus(o.getStatus()));
+                    orderService.saveOrder(o);
+                }
+        );
         return order.map(o -> singleOrderPanel(o, model))
                 .orElse("redirect:/");
     }
@@ -56,5 +58,12 @@ public class OrderPanelController {
                 .mapToDouble(Item::getPrice)
                 .sum());
         return "panel/order";
+    }
+
+    private Consumer<Order> changeOrderStatusAndSave(Order order){
+        return o -> {
+            o.setStatus(OrderStatus.nextStatus(o.getStatus()));
+            orderService.saveOrder(o);
+        };
     }
 }
