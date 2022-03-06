@@ -10,15 +10,15 @@ import java.util.Optional;
 @Controller
 public class ItemController {
 
-    private ItemRepository itemRepository;
+    private final ItemService itemService;
 
-    public ItemController(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
     }
 
     @GetMapping("/danie/{name}")
-    public String getItem(@PathVariable String name, Model model){
-        Optional<Item> item = itemRepository.findByNameIgnoreCase(name.replaceAll("-"," "));
+    public String getItem(@PathVariable String name, Model model) {
+        Optional<Item> item = itemService.findItemByNameIgnoreCase(name.replaceAll("-", " "));
         item.ifPresent(it -> model.addAttribute("item", it));
         return item.map(it -> "item").orElse("redirect:/");
     }
