@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.javastart.foodieapp.item.Item;
+import pl.javastart.foodieapp.item.ItemDto;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @AllArgsConstructor
 @Controller
@@ -21,7 +20,7 @@ public class OrderPanelController {
 
     @GetMapping("/panel/zamowienia")
     public String getOrders(@RequestParam(required = false) OrderStatus status, Model model) {
-        List<Order> orders;
+        List<OrderDto> orders;
         if (status == null) {
             orders = orderService.findAllOrders();
         } else {
@@ -33,15 +32,14 @@ public class OrderPanelController {
 
     @GetMapping("/panel/zamowienie/{id}")
     public String singleOrder(@PathVariable Long id, Model model) {
-        Optional<Order> order = orderService.findOrderById(id);
-        return order.map(o -> singleOrderPanel(o, model))
+        Optional<OrderDto> orderDto = orderService.findOrderById(id);
+        return orderDto.map(o -> singleOrderPanel(o, model))
                 .orElse("redirect:/");
     }
 
     @PostMapping("/panel/zamowienie/{id}")
     public String changeOrderStatus(@PathVariable Long id, Model model) {
-        Optional<Order> order = orderService.findOrderById(id);
-//        order.ifPresent(OrderPanelController::changeOrderStatusAndSave);
+        Optional<OrderDto> order = orderService.findOrderById(id);
         order.ifPresent(
                 o -> {
                     o.setStatus(OrderStatus.nextStatus(o.getStatus()));
@@ -52,18 +50,13 @@ public class OrderPanelController {
                 .orElse("redirect:/");
     }
 
-    private String singleOrderPanel(Order order, Model model) {
-        model.addAttribute("order", order);
-        model.addAttribute("sum", order.getItems().stream()
-                .mapToDouble(Item::getPrice)
+    private String singleOrderPanel(OrderDto orderDto, Model model) {
+        model.addAttribute("order", orderDto);
+        model.addAttribute("sum", orderDto.getItems().stream()
+                .mapToDouble(ItemDto::getPrice)
                 .sum());
         return "panel/order";
     }
 
-    private Consumer<Order> changeOrderStatusAndSave(Order order){
-        return o -> {
-            o.setStatus(OrderStatus.nextStatus(o.getStatus()));
-            orderService.saveOrder(o);
-        };
-    }
+
 }

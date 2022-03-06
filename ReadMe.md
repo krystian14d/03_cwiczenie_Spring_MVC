@@ -4,9 +4,7 @@ Main focus on Spring MVC.
 
 PROBLEMY:
 klasa ItemService:
- - metoda findItemById - linijka 21
-   - itemRepository zwraca mi optional, chciałbym to później zmapować na obiekt ItemDto, jak poprawić ten zapis? 
-   - Zastosowałem metodę .get() na obiekcie zwróconym z itemrepository, ale jeśli itemrepo zwróci mi null to będę mieć błąd... a ten null jest obsługiwany później w klasie ItemController. Jak to poprawić?
+ - poprawiłem kod metod - wydaje mi się że zoptymalizowałem działanie Optionala, możesz sprawdzić czy jest OK?
 
 Lombok i konstruktory:
  - klasa ItemDtoMapper:
