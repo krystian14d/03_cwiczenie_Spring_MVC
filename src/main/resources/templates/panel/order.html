@@ -17,7 +17,7 @@
                 <h2 th:case="${T(pl.javastart.foodieapp.order.OrderStatus).IN_PROGRESS}">Status: W realizacji</h2>
                 <h2 th:case="${T(pl.javastart.foodieapp.order.OrderStatus).COMPLETE}">Status: Zrealizowane</h2>
             </th:block>
-            <a th:href="@{/panel/zamowienia}">Lista zamówień</a>
+            <a th:href="@{/panel/orders}">Lista zamówień</a>
         </div>
     </div>
     <div class="row">
@@ -52,7 +52,7 @@
                 <h5 th:text="|Do zapłaty: ${#numbers.formatDecimal(sum,1,2,'COMMA')}zł|">Do zapłaty: 99.99zł</h5>
             </div>
             <div class="text-center" th:if="${order.status != T(pl.javastart.foodieapp.order.OrderStatus).COMPLETE}">
-                <form action="#" th:action="@{|/panel/zamowienie/${order.id}|}" method="post">
+                <form action="#" th:action="@{|/panel/order/${order.id}|}" method="post">
                     <button class="btn btn-primary"
                             th:if="${order.status == T(pl.javastart.foodieapp.order.OrderStatus).NEW}">Realizuj</button>
                     <button class="btn btn-success"
@@ -63,7 +63,7 @@
         <div class="col-12">
             <div th:if="${order.items.isEmpty()}" class="text-center">
                 <h2>Zamówienie jest puste</h2>
-                <a href="#" th:href="@{/panel/zamowienia}">Wróć do listy zamówień</a>
+                <a href="#" th:href="@{/panel/orders}">Wróć do listy zamówień</a>
             </div>
         </div>
     </div>

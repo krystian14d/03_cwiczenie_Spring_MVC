@@ -1,13 +1,13 @@
 package pl.javastart.foodieapp.order;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import pl.javastart.foodieapp.item.ItemDtoMapper;
 
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Service
+@Component
 public class OrderDtoMapper {
 
     public static OrderDto map(Order order) {

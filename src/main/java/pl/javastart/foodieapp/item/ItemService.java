@@ -1,22 +1,24 @@
 package pl.javastart.foodieapp.item;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class ItemService {
 
     private final ItemRepository itemRepository;
-    private final ItemDtoMapper itemDtoMapper;
 
-    Optional<ItemDto> findItemByNameIgnoreCase(String name) {
+    @Transactional(readOnly = true)
+    public Optional<ItemDto> findItemByNameIgnoreCase(String name) {
         Optional<Item> foundItem = itemRepository.findByNameIgnoreCase(name);
         return mapAndReturnItemDto(foundItem);
     }
 
+    @Transactional(readOnly = true)
     public Optional<ItemDto> findItemById(Long id) {
         Optional<Item> foundItem = itemRepository.findById(id);
         return mapAndReturnItemDto(foundItem);
@@ -27,7 +29,7 @@ public class ItemService {
             return Optional.empty();
         }
         Item item = foundItem.get();
-        ItemDto itemDto = itemDtoMapper.map(item);
+        ItemDto itemDto = ItemDtoMapper.map(item);
         return Optional.of(itemDto);
     }
 }

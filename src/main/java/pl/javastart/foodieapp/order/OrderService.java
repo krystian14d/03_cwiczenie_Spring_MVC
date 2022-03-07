@@ -1,19 +1,20 @@
 package pl.javastart.foodieapp.order;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderDtoMapper orderDtoMapper;
 
+    @Transactional
     public void saveOrder(OrderDto orderDto) {
         Order order = OrderDtoMapper.map(orderDto);
         orderRepository.save(order);

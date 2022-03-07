@@ -1,8 +1,8 @@
 package pl.javastart.foodieapp.item;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class ItemDtoMapper {
 
     public static ItemDto map(Item item) {

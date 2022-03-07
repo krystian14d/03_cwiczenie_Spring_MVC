@@ -1,6 +1,7 @@
 package pl.javastart.foodieapp.order;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +13,13 @@ import pl.javastart.foodieapp.item.ItemDto;
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Controller
 public class OrderPanelController {
 
-    private OrderService orderService;
+    private final OrderService orderService;
 
-    @GetMapping("/panel/zamowienia")
+    @GetMapping("/panel/orders")
     public String getOrders(@RequestParam(required = false) OrderStatus status, Model model) {
         List<OrderDto> orders;
         if (status == null) {
@@ -30,14 +31,14 @@ public class OrderPanelController {
         return "panel/orders";
     }
 
-    @GetMapping("/panel/zamowienie/{id}")
+    @GetMapping("/panel/order/{id}")
     public String singleOrder(@PathVariable Long id, Model model) {
         Optional<OrderDto> orderDto = orderService.findOrderById(id);
         return orderDto.map(o -> singleOrderPanel(o, model))
                 .orElse("redirect:/");
     }
 
-    @PostMapping("/panel/zamowienie/{id}")
+    @PostMapping("/panel/order/{id}")
     public String changeOrderStatus(@PathVariable Long id, Model model) {
         Optional<OrderDto> order = orderService.findOrderById(id);
         order.ifPresent(

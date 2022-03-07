@@ -1,6 +1,7 @@
 package pl.javastart.foodieapp.order;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,15 +13,15 @@ import pl.javastart.foodieapp.item.ItemService;
 
 import java.util.Optional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Controller
 public class OrderController {
 
-    private ClientOrder clientOrder;
-    private ItemService itemService;
-    private OrderService orderService;
+    private final ClientOrder clientOrder;
+    private final ItemService itemService;
+    private final OrderService orderService;
 
-    @GetMapping("/zamowienie/dodaj")
+    @GetMapping("/order/add")
     public String addItemToOrder(@RequestParam Long itemId, Model model) {
         Optional<ItemDto> item = itemService.findItemById(itemId);
         item.ifPresent(clientOrder::add);
@@ -32,7 +33,7 @@ public class OrderController {
         return "message";
     }
 
-    @GetMapping("/zamowienie")
+    @GetMapping("/order")
     public String getCurrentOrder(Model model) {
         model.addAttribute("order", clientOrder.getOrderDto());
         model.addAttribute("sum", clientOrder
@@ -44,7 +45,7 @@ public class OrderController {
         return "order";
     }
 
-    @PostMapping("/zamowienie/realizuj")
+    @PostMapping("/order/fulfill")
     public String proceedOrder(@RequestParam String address, @RequestParam String telephone, Model model) {
         OrderDto orderDto = clientOrder.getOrderDto();
         orderDto.setAddress(address);
