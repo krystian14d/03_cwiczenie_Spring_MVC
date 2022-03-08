@@ -5,11 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/order")
 public class ItemController {
 
     private final ItemService itemService;
@@ -18,7 +20,7 @@ public class ItemController {
     //zmienić pathvariable na requestparam zgodnie z zasadami restApi
     //
 
-    @GetMapping("/order/{name}")
+    @GetMapping("/{name}")
     public String getItem(@PathVariable String name, Model model) {
         Optional<ItemDto> itemDto = itemService.findItemByNameIgnoreCase(name.replaceAll("-", " "));
         itemDto.ifPresent(it -> model.addAttribute("item", it));
