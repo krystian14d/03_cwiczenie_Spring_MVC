@@ -10,5 +10,5 @@ PROBLEM:
  - klikam "Realizuj" żeby zmienić jego stan na "w realizacji"
  - na banerze jak kliknę "Lista zamówień" żeby powrócić do listy, to zamówienie #1 nie zmieniło swojego statusu, natomiast na samym dole listy pojawiło się nowe zamówienie, np. z id #7 które ma zmieniony status na "w realizacji"
  - wygląda mi na to jakby program zapisywał jako nowe zamówienie, zamiast zmieniać istniejące
- - przypuszczam że jakiś problem może być z mapperami, ale mogę się mylić... :(
+
 
