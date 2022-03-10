@@ -3,9 +3,12 @@ package pl.javastart.foodieapp.order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import pl.javastart.foodieapp.item.Item;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDto> findAllOrders() {
         List<Order> allOrders = orderRepository.findAll();
         return allOrders.stream()
@@ -27,6 +31,7 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDto> findAllOrdersByStatus(OrderStatus status) {
         List<Order> allOrdersByStatus = orderRepository.findAllByStatus(status);
         return allOrdersByStatus.stream()
@@ -34,12 +39,35 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<OrderDto> findOrderById(Long id) {
-        Optional<Order> foundOrder = orderRepository.findById(id);
-        if (foundOrder.isEmpty()) {
-            return Optional.empty();
-        }
-        OrderDto orderDto = OrderDtoMapper.map(foundOrder.get());
-        return Optional.of(orderDto);
+    @Transactional(readOnly = true)
+    public String displaySingleOrder(Long id, Model model) {
+        Optional<Order> order = orderRepository.findById(id);
+        return order.map(o -> singleOrderPanel(o, model))
+                .orElse("redirect:/");
+    }
+
+    @Transactional
+    public String changeOrderStatus(Long id, Model model) {
+        return orderRepository.findById(id)
+                .map(changeStatus())
+                .map(o -> singleOrderPanel(o, model))
+                .orElse("redirect:/");
+    }
+
+    private UnaryOperator<Order> changeStatus() {
+        return this::changeStatus;
+    }
+
+    private Order changeStatus(Order order) {
+        order.setStatus(OrderStatus.nextStatus(order.getStatus()));
+        return order;
+    }
+
+    private String singleOrderPanel(Order order, Model model) {
+        model.addAttribute("order", order);
+        model.addAttribute("sum", order.getItems().stream()
+                .mapToDouble(Item::getPrice)
+                .sum());
+        return "panel/order";
     }
 }

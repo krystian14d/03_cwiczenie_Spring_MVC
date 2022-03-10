@@ -3,6 +3,7 @@ package pl.javastart.foodieapp.item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import java.util.Optional;
 
@@ -13,9 +14,10 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     @Transactional(readOnly = true)
-    public Optional<ItemDto> findItemByNameIgnoreCase(String name) {
-        Optional<Item> foundItem = itemRepository.findByNameIgnoreCase(name);
-        return mapAndReturnItemDto(foundItem);
+    public String findItemByNameIgnoreCase(String name, Model model) {
+        Optional<Item> foundItem = itemRepository.findByNameIgnoreCase(name.replaceAll("-", " "));
+        foundItem.ifPresent(item -> model.addAttribute("item", item));
+        return foundItem.map(item -> "item").orElse("redirect:/");
     }
 
     @Transactional(readOnly = true)

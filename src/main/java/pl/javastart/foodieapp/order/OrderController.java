@@ -1,6 +1,5 @@
 package pl.javastart.foodieapp.order;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,8 @@ public class OrderController {
     private final ItemService itemService;
     private final OrderService orderService;
 
-    @GetMapping("/add")
+
+    @PostMapping("/add")
     public String addItemToOrder(@RequestParam Long itemId, Model model) {
         Optional<ItemDto> item = itemService.findItemById(itemId);
         item.ifPresent(clientOrder::add);
@@ -38,12 +38,7 @@ public class OrderController {
     @GetMapping
     public String getCurrentOrder(Model model) {
         model.addAttribute("order", clientOrder.getOrderDto());
-        model.addAttribute("sum", clientOrder
-                .getOrderDto()
-                .getItems()
-                .stream()
-                .mapToDouble(ItemDto::getPrice)
-                .sum());
+        model.addAttribute("sum", clientOrder.sumClientOrderPrice());
         return "order";
     }
 

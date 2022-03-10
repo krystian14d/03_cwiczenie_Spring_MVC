@@ -26,4 +26,12 @@ public class ClientOrder {
         orderDto = new OrderDto();
         orderDto.setStatus(OrderStatus.NEW);
     }
+
+    public double sumClientOrderPrice() {
+        return orderDto
+                .getItems()
+                .stream()
+                .mapToDouble(ItemDto::getPrice)
+                .sum();
+    }
 }

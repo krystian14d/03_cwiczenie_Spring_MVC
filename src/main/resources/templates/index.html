@@ -26,9 +26,9 @@
                 </a>
                 <p th:text="${item.shortDescription}">Krótki opis pizzy margherita, pysznej klasyki na cienkim cieście i
                     rozpływającym się serem.</p>
-                <a href="#" th:href="@{/order/add(itemId=${item.id})}" class="btn btn-sm btn-primary">
-                Dodaj do zamówienia
-                </a>
+                <form action="#" th:action="@{/order/add(itemId=${item.id})}" method="post" th:object="${item}">
+                    <button type="submit" class="btn btn-sm btn-primary">Dodaj do zamówienia</button>
+                </form>
             </div>
         </div>
         <div class="media col-6 offset-3">

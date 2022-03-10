@@ -7,23 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/order")
+@RequestMapping("/course")
 public class ItemController {
 
     private final ItemService itemService;
 
-    //dodać request mapping nad klasą kontrolera, dodać w requestmapping /danie/
-    //zmienić pathvariable na requestparam zgodnie z zasadami restApi
-    //
-
     @GetMapping("/{name}")
     public String getItem(@PathVariable String name, Model model) {
-        Optional<ItemDto> itemDto = itemService.findItemByNameIgnoreCase(name.replaceAll("-", " "));
-        itemDto.ifPresent(it -> model.addAttribute("item", it));
-        return itemDto.map(it -> "item").orElse("redirect:/");
+        return itemService.findItemByNameIgnoreCase(name, model);
     }
 }
