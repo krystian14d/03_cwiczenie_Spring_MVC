@@ -2,28 +2,36 @@ package pl.javastart.foodieapp.order;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
-import pl.javastart.foodieapp.item.Item;
+import pl.javastart.foodieapp.item.ItemDto;
 
 @Component
 @SessionScope
 public class ClientOrder {
 
-    private Order order;
+    private OrderDto orderDto;
 
     public ClientOrder() {
         clear();
     }
 
-    public Order getOrder() {
-        return order;
+    public OrderDto getOrderDto() {
+        return orderDto;
     }
 
-    void add(Item item) {
-        order.getItems().add(item);
+    void add(ItemDto itemDto) {
+        orderDto.getItems().add(itemDto);
     }
 
     void clear() {
-        order = new Order();
-        order.setStatus(OrderStatus.NEW);
+        orderDto = new OrderDto();
+        orderDto.setStatus(OrderStatus.NEW);
+    }
+
+    public double sumClientOrderPrice() {
+        return orderDto
+                .getItems()
+                .stream()
+                .mapToDouble(ItemDto::getPrice)
+                .sum();
     }
 }

@@ -45,7 +45,7 @@
         <div class="text-right">
             <h5 th:text="|Do zapłaty: ${#numbers.formatDecimal(sum,1,2,'COMMA')}zł|">Do zapłaty: 99.99zł</h5>
         </div>
-        <form action="#" th:action="@{/zamowienie/realizuj}" method="post">
+        <form action="#" th:action="@{/order/realize}" method="post">
             <div class="form-group">
                 <label for="addressInput">Adres</label>
                 <input type="text" class="form-control" id="addressInput" name="address"

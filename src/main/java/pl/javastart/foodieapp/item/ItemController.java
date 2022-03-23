@@ -1,25 +1,21 @@
 package pl.javastart.foodieapp.item;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
+@RequiredArgsConstructor
 @Controller
+@RequestMapping("/course")
 public class ItemController {
 
-    private ItemRepository itemRepository;
+    private final ItemService itemService;
 
-    public ItemController(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
-    }
-
-    @GetMapping("/danie/{name}")
-    public String getItem(@PathVariable String name, Model model){
-        Optional<Item> item = itemRepository.findByNameIgnoreCase(name.replaceAll("-"," "));
-        item.ifPresent(it -> model.addAttribute("item", it));
-        return item.map(it -> "item").orElse("redirect:/");
+    @GetMapping("/{name}")
+    public String getItem(@PathVariable String name, Model model) {
+        return itemService.findItemByNameIgnoreCase(name, model);
     }
 }
